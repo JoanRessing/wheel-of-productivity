@@ -85,7 +85,7 @@ export function getSelectedDependencyIds(container = els.dependencies) {
   return checked.map((input) => input.value);
 }
 export function clearDependencySelections(container = els.dependencies) {
-  for (const input of container.querySelectorAll('input[type="checkbox"]')) {
+  for (const input of Array.from(container.querySelectorAll('input[type="checkbox"]'))) {
     input.checked = false;
   }
 }

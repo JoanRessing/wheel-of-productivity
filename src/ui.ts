@@ -105,7 +105,7 @@ export function getSelectedDependencyIds(container: HTMLElement = els.dependenci
 }
 
 export function clearDependencySelections(container: HTMLElement = els.dependencies): void {
-  for (const input of container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')) {
+  for (const input of Array.from(container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]'))) {
     input.checked = false;
   }
 }
