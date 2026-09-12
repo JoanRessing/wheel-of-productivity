@@ -85,6 +85,25 @@
       <p>Data is stored only in session cookies and clears when the session ends.</p>
     </footer>
 
-    <script type="module" src="./js/app.js"></script>
+    <script>
+      // Flag to detect successful module init
+      window.__appLoaded = false;
+    </script>
+    <script type="module" src="./js/app.js" onerror="(function(){var s=document.createElement('script');s.id='app-standalone-loaded';s.src='./js/app-standalone.js';document.head.appendChild(s);}())"></script>
+    <script>
+      (function(){
+        var isFile = location.protocol === 'file:';
+        if (!isFile) return;
+        // In Chrome with file://, module imports may fail; fall back to classic script
+        setTimeout(function(){
+          if (!window.__appLoaded && !document.getElementById('app-standalone-loaded')){
+            var s=document.createElement('script');
+            s.id='app-standalone-loaded';
+            s.src='./js/app-standalone.js';
+            document.head.appendChild(s);
+          }
+        }, 80);
+      })();
+    </script>
   </body>
   </html>
