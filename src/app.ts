@@ -8,6 +8,30 @@ import { burstConfetti } from './confetti.js';
 // Ensure session id cookie exists
 getOrCreateSessionId();
 
+function cookieRoundtripWorks(): boolean {
+  const key = 'wop_test_' + Math.random().toString(36).slice(2);
+  document.cookie = `${key}=1; Path=/`;
+  const ok = document.cookie.includes(`${key}=`);
+  // best-effort cleanup
+  document.cookie = `${key}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+  return ok;
+}
+
+function showCookieNotice() {
+  const n = document.createElement('div');
+  n.setAttribute('role', 'status');
+  n.className = 'notice';
+  n.innerHTML = '<strong>Heads up:</strong> Some browsers block cookies and modules when opened as a local file. For best results, open via a local server or GitHub Pages.';
+  const btn = document.createElement('button');
+  btn.className = 'icon-btn small';
+  btn.style.marginLeft = '0.5rem';
+  btn.ariaLabel = 'Dismiss';
+  btn.textContent = 'Dismiss';
+  btn.addEventListener('click', () => n.remove());
+  n.appendChild(btn);
+  document.body.prepend(n);
+}
+
 let tasks: Task[] = loadState().tasks;
 
 const wheel = new Wheel(els.canvas);
@@ -91,11 +115,38 @@ els.spinBtn.addEventListener('keydown', (e) => {
 // Initial render
 sync();
 
+// If running from file:// in Chrome, cookies may not work; show a helpful notice
+try {
+  const isFile = location.protocol === 'file:';
+  if (isFile && !cookieRoundtripWorks()) {
+    showCookieNotice();
+  }
+} catch {}
+
 // Drawer and modal interactions
 if (els.drawerToggle) {
   els.drawerToggle.addEventListener('click', () => {
     const isOpen = els.drawer.classList.toggle('open');
     els.drawerToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    if (els.drawerOverlay) els.drawerOverlay.hidden = !isOpen;
+  });
+}
+
+if (els.drawerClose) {
+  els.drawerClose.addEventListener('click', () => {
+    els.drawer.classList.remove('open');
+    els.drawerToggle.setAttribute('aria-expanded', 'false');
+    els.drawerToggle.focus();
+    if (els.drawerOverlay) els.drawerOverlay.hidden = true;
+  });
+}
+
+if (els.drawerOverlay) {
+  els.drawerOverlay.addEventListener('click', () => {
+    els.drawer.classList.remove('open');
+    els.drawerToggle.setAttribute('aria-expanded', 'false');
+    els.drawerToggle.focus();
+    els.drawerOverlay.hidden = true;
   });
 }
 

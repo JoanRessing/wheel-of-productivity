@@ -10,7 +10,7 @@
   <body>
     <header class="container header">
       <h1>Wheel of Productivity</h1>
-      <button id="drawer-toggle" class="tasks-toggle" aria-controls="drawer" aria-expanded="false">Tasks</button>
+      <button id="drawer-toggle" type="button" class="tasks-toggle" aria-controls="drawer" aria-expanded="false" aria-label="Toggle tasks drawer">Tasks</button>
     </header>
 
     <main class="container main-center">
@@ -22,17 +22,21 @@
           <div class="indicator" aria-hidden="true">▼</div>
         </div>
         <div class="actions center">
-          <button id="open-add-task" class="secondary">Add task</button>
-          <button id="spin">Spin!</button>
+          <button id="open-add-task" type="button" class="secondary">Add task</button>
+          <button id="spin" type="button">Spin!</button>
         </div>
         <p id="result" class="result" aria-live="assertive"></p>
       </section>
     </main>
 
+    <div id="drawer-overlay" class="overlay overlay-drawer" hidden></div>
     <aside id="drawer" class="drawer" role="complementary" aria-labelledby="tasks-heading">
       <div class="drawer-header">
         <h2 id="tasks-heading">Tasks</h2>
-        <div id="task-count" aria-live="polite" class="muted"></div>
+        <div class="drawer-header-actions">
+          <div id="task-count" aria-live="polite" class="muted"></div>
+          <button id="drawer-close" type="button" class="icon-btn small" aria-label="Close tasks drawer">✕</button>
+        </div>
       </div>
       <ul id="task-list" class="task-list" aria-live="polite"></ul>
       <div class="drawer-actions">

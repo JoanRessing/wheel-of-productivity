@@ -8,6 +8,8 @@ export const els = {
   resetBtn: document.getElementById('reset-session'),
   drawerToggle: document.getElementById('drawer-toggle'),
   drawer: document.getElementById('drawer'),
+  drawerOverlay: document.getElementById('drawer-overlay'),
+  drawerClose: document.getElementById('drawer-close'),
   openAddTask: document.getElementById('open-add-task'),
   modal: document.getElementById('task-modal'),
   overlay: document.getElementById('modal-overlay'),

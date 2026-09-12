@@ -10,6 +10,8 @@ export const els = {
   resetBtn: document.getElementById('reset-session') as HTMLButtonElement,
   drawerToggle: document.getElementById('drawer-toggle') as HTMLButtonElement,
   drawer: document.getElementById('drawer') as HTMLElement,
+  drawerOverlay: document.getElementById('drawer-overlay') as HTMLElement,
+  drawerClose: document.getElementById('drawer-close') as HTMLButtonElement,
   openAddTask: document.getElementById('open-add-task') as HTMLButtonElement,
   modal: document.getElementById('task-modal') as HTMLElement,
   overlay: document.getElementById('modal-overlay') as HTMLElement,
