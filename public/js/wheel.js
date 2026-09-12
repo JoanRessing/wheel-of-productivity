@@ -56,7 +56,7 @@ export class Wheel {
     let delta = targetAngleForSelectedMid - currentSelectedMid;
     const extraTurns = prefersReducedMotion ? 0 : 3 + Math.random() * 2;
     delta += extraTurns * Math.PI * 2;
-    const duration = prefersReducedMotion ? 350 : 3200;
+    const duration = prefersReducedMotion ? 350 : 3400;
     const startAngle = this.state.angle;
     const startTime = performance.now();
     return new Promise((resolve) => {
@@ -69,9 +69,11 @@ export class Wheel {
           requestAnimationFrame(step);
         } else {
           this.state.spinning = false;
-          this.state.angle = this.state.angle % (Math.PI * 2);
-          this.draw(tasks, selected);
-          onSelected(selected);
+          this.state.angle = ((this.state.angle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+          const theta = ((-Math.PI / 2 - this.state.angle) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+          const indexAtTop = Math.floor(theta / anglePer) % n;
+          this.draw(tasks, indexAtTop);
+          onSelected(indexAtTop);
           resolve();
         }
       };

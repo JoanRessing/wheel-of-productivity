@@ -3,6 +3,7 @@ import { uid } from './util.js';
 import { loadState, saveState, getOrCreateSessionId, clearSession } from './storage.js';
 import { els, clearForm, renderTasks, announceResult } from './ui.js';
 import { Wheel } from './wheel.js';
+import { burstConfetti } from './confetti.js';
 
 // Ensure session id cookie exists
 getOrCreateSessionId();
@@ -56,6 +57,9 @@ els.spinBtn.addEventListener('click', async () => {
   await wheel.spin(tasks, (idx) => {
     const t = tasks[idx];
     if (t) announceResult(t.name);
+    // Confetti burst on result
+    const confettiCanvas = document.getElementById('confetti') as HTMLCanvasElement | null;
+    if (confettiCanvas) burstConfetti(confettiCanvas, prefers);
   }, prefers);
 });
 

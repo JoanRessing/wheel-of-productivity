@@ -73,7 +73,7 @@ export class Wheel {
     const extraTurns = prefersReducedMotion ? 0 : 3 + Math.random() * 2; // 3-5 turns
     delta += extraTurns * Math.PI * 2;
 
-    const duration = prefersReducedMotion ? 350 : 3200; // ms
+    const duration = prefersReducedMotion ? 350 : 3400; // ms (a touch longer)
     const startAngle = this.state.angle;
     const startTime = performance.now();
 
@@ -87,10 +87,13 @@ export class Wheel {
           requestAnimationFrame(step);
         } else {
           this.state.spinning = false;
-          // Normalize angle and ensure the selected segment appears highlighted
-          this.state.angle = this.state.angle % (Math.PI * 2);
-          this.draw(tasks, selected);
-          onSelected(selected);
+          // Normalize angle to [0, 2PI)
+          this.state.angle = ((this.state.angle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+          // Compute which index actually sits under the indicator at the top
+          const theta = ((-Math.PI / 2 - this.state.angle) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+          const indexAtTop = Math.floor(theta / anglePer) % n;
+          this.draw(tasks, indexAtTop);
+          onSelected(indexAtTop);
           resolve();
         }
       };

@@ -4,6 +4,7 @@ import { getOrCreateSessionId, loadState, saveState, clearSession } from './stor
 import { uid } from './util.js';
 import { els, clearForm, renderTasks, announceResult } from './ui.js';
 import { Wheel } from './wheel.js';
+import { burstConfetti } from './confetti.js';
 
 getOrCreateSessionId();
 let tasks = loadState().tasks;
@@ -50,6 +51,8 @@ els.spinBtn.addEventListener('click', async () => {
   await wheel.spin(tasks, (idx) => {
     const t = tasks[idx];
     if (t) announceResult(t.name);
+    const confettiCanvas = document.getElementById('confetti');
+    if (confettiCanvas) burstConfetti(confettiCanvas, prefers);
   }, prefers);
 });
 els.spinBtn.addEventListener('keydown', (e) => {

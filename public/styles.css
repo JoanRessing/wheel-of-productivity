@@ -69,7 +69,8 @@ button:disabled { opacity: .6; cursor: not-allowed; }
 .icon-btn { background: transparent; border: 1px solid #334155; color: var(--fg); border-radius: 8px; padding: .3rem .5rem; }
 
 .wheel-wrap { position: relative; display: grid; place-items: center; }
-canvas#wheel { width: min(86vw, 500px); height: auto; max-width: 500px; background: #0b1220; border-radius: 50%; border: 1px solid #1f2937; }
+canvas#wheel { width: min(86vw, 500px); height: auto; max-width: 500px; background: #0b1220; border-radius: 50%; border: 1px solid #1f2937; z-index: 1; }
+canvas#confetti { position: absolute; inset: 0; width: min(86vw, 500px); height: auto; max-width: 500px; pointer-events: none; z-index: 2; }
 .indicator { position: absolute; top: 6px; font-size: 1.25rem; color: var(--accent-2); text-shadow: 0 1px 0 #000; }
 .result { font-size: 1.1rem; min-height: 1.5em; }
 
