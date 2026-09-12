@@ -6,8 +6,15 @@ export interface Task {
   time?: number; // minutes
   location: Location;
   deadline?: string; // ISO date (yyyy-mm-dd)
+  prerequisiteIds?: string[];
   // reserved for future weights
   weight?: number;
+}
+
+export interface TaskFilters {
+  maxTime?: number;
+  includeIndoor: boolean;
+  includeOutdoor: boolean;
 }
 
 export interface AppState {
@@ -32,6 +39,7 @@ export interface CookieDataV1 {
     tm?: number; // time
     l: Location; // location
     d?: string; // deadline
+    p?: string[]; // prerequisites
     w?: number; // weight
   }>;
 }

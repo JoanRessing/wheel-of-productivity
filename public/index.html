@@ -19,7 +19,31 @@
       <button id="drawer-toggle" type="button" class="tasks-toggle" aria-controls="drawer" aria-expanded="false" aria-label="Toggle tasks drawer">Tasks</button>
     </header>
 
-    <main class="container main-center">
+    <main class="container main-layout">
+      <aside aria-labelledby="filters-heading" class="card filters-card">
+        <h2 id="filters-heading">Selection filters</h2>
+        <p class="muted filters-help">Only matching tasks appear on the wheel.</p>
+        <div class="filter-controls">
+          <label for="filter-time">
+            <span>Available time (min)</span>
+            <input type="number" id="filter-time" min="0" step="5" placeholder="e.g., 60" inputmode="numeric" />
+          </label>
+          <fieldset>
+            <legend>Location</legend>
+            <label class="check-option" for="filter-indoor">
+              <input type="checkbox" id="filter-indoor" checked />
+              <span>Indoor</span>
+            </label>
+            <label class="check-option" for="filter-outdoor">
+              <input type="checkbox" id="filter-outdoor" checked />
+              <span>Outdoor</span>
+            </label>
+          </fieldset>
+        </div>
+        <p id="filter-summary" class="filter-summary" aria-live="polite"></p>
+        <button id="clear-filters" type="button" class="secondary small">Clear filters</button>
+      </aside>
+
       <section aria-labelledby="wheel-heading" class="card wheel-card">
         <h2 id="wheel-heading" class="sr-only">Wheel</h2>
         <div class="wheel-wrap">
@@ -80,6 +104,10 @@
               <input type="date" id="task-deadline" />
             </label>
           </div>
+          <fieldset class="dependency-fieldset">
+            <legend>Requires these tasks first</legend>
+            <div id="task-dependencies" class="dependency-options muted">No existing tasks to depend on yet.</div>
+          </fieldset>
           <div class="actions right">
             <button id="add-task" type="submit">Add task</button>
           </div>

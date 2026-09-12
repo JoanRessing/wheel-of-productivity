@@ -6,6 +6,7 @@ Key points
 - Static site (no backend) built with TypeScript and vanilla HTML/CSS.
 - Persistent local browser storage using localStorage.
 - Accessible UI with keyboard support and ARIA live announcements.
+- Rollable-task filtering by time, location, and prerequisites.
 - Ready for GitHub Pages hosting.
 
 Preview
@@ -30,7 +31,7 @@ Data and privacy
 - No analytics or tracking.
 
 Planned enhancements
-- Filters by time/location/deadline at spin time.
+- Deadline-aware filters at spin time.
 - Optional per-task weights.
 - Export/import tasks.
 - PWA support.

@@ -85,11 +85,42 @@ header h1 {
   letter-spacing: .01em;
 }
 
-.main-center {
+.main-layout {
   min-height: calc(100vh - 12.5rem);
   display: grid;
-  place-items: center;
+  grid-template-columns: minmax(220px, 280px) minmax(0, 760px);
+  justify-content: center;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2rem);
   padding: 0.6rem 0 1rem;
+}
+
+.filters-card {
+  width: 100%;
+  padding: clamp(1rem, 2.4vw, 1.35rem);
+  align-self: center;
+}
+
+.filters-card h2 {
+  margin: 0;
+  letter-spacing: -.035em;
+}
+
+.filters-help {
+  margin: .25rem 0 1rem;
+  font-size: .92rem;
+}
+
+.filter-controls {
+  display: grid;
+  gap: .9rem;
+}
+
+.filter-summary {
+  min-height: 2.5rem;
+  margin: .95rem 0;
+  color: var(--muted);
+  font-size: .92rem;
 }
 
 .card {
@@ -271,6 +302,71 @@ input, select {
 input::placeholder { color: rgba(226,232,240,.52); }
 input:focus, select:focus { outline: 3px solid rgba(34,211,238,.58); border-color: rgba(34,211,238,.85); }
 
+fieldset {
+  margin: 0;
+  padding: .85rem;
+  border: 1px solid var(--stroke-strong);
+  border-radius: 16px;
+}
+
+legend {
+  padding: 0 .35rem;
+  color: #eaf7ff;
+  font-size: .95rem;
+  font-weight: 760;
+}
+
+.check-option {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: .55rem;
+  margin-top: .55rem;
+  cursor: pointer;
+}
+
+.check-option input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.dependency-fieldset {
+  margin-top: 1rem;
+}
+
+.dependency-options {
+  display: grid;
+  gap: .45rem;
+  max-height: 10rem;
+  overflow-y: auto;
+  padding-right: .25rem;
+}
+
+.dependency-option {
+  margin-top: 0;
+  font-size: .9rem;
+  font-weight: 650;
+}
+
+.dependency-editor {
+  margin-top: .45rem;
+}
+
+.dependency-editor summary {
+  width: fit-content;
+  color: #eaf7ff;
+  cursor: pointer;
+  font-size: .8rem;
+  font-weight: 800;
+}
+
+.dependency-editor .dependency-options {
+  margin-top: .45rem;
+  max-height: 7rem;
+}
+
 .task-list {
   list-style: none;
   padding: 0;
@@ -420,6 +516,17 @@ footer { margin: .3rem auto 1rem; text-align: center; font-size: .9rem; }
   .actions { gap: .6rem; }
   #spin, #open-add-task { min-width: 8rem; }
   footer { font-size: .82rem; }
+}
+
+@media (max-width: 900px) {
+  .main-layout {
+    grid-template-columns: minmax(0, 760px);
+    align-items: stretch;
+  }
+
+  .filters-card {
+    order: 2;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

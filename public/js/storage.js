@@ -21,6 +21,11 @@ function parseTask(value) {
         task.time = record.time;
     if (typeof record.deadline === 'string' && record.deadline)
         task.deadline = record.deadline;
+    if (Array.isArray(record.prerequisiteIds)) {
+        const prerequisiteIds = record.prerequisiteIds.filter((id) => typeof id === 'string');
+        if (prerequisiteIds.length > 0)
+            task.prerequisiteIds = [...new Set(prerequisiteIds)];
+    }
     if (typeof record.weight === 'number' && Number.isFinite(record.weight))
         task.weight = record.weight;
     return task;
@@ -66,6 +71,7 @@ function readCookieMigrationState() {
             time: t.tm,
             location: t.l,
             deadline: t.d,
+            prerequisiteIds: t.p,
             weight: t.w,
         })).map(parseTask).filter((task) => task !== null);
         return { tasks };

@@ -26,6 +26,10 @@ function parseTask(value: unknown): Task | null {
   };
   if (typeof record.time === 'number' && Number.isFinite(record.time)) task.time = record.time;
   if (typeof record.deadline === 'string' && record.deadline) task.deadline = record.deadline;
+  if (Array.isArray(record.prerequisiteIds)) {
+    const prerequisiteIds = record.prerequisiteIds.filter((id): id is string => typeof id === 'string');
+    if (prerequisiteIds.length > 0) task.prerequisiteIds = [...new Set(prerequisiteIds)];
+  }
   if (typeof record.weight === 'number' && Number.isFinite(record.weight)) task.weight = record.weight;
   return task;
 }
@@ -71,6 +75,7 @@ function readCookieMigrationState(): AppState | null {
       time: t.tm,
       location: t.l,
       deadline: t.d,
+      prerequisiteIds: t.p,
       weight: t.w,
     })).map(parseTask).filter((task): task is Task => task !== null);
     return { tasks };
