@@ -15,30 +15,27 @@ interface Piece {
 
 const COLORS = ['#22d3ee', '#f59e0b', '#34d399', '#a78bfa', '#f472b6', '#f43f5e', '#60a5fa'];
 
-export function burstConfetti(canvas: HTMLCanvasElement, prefersReducedMotion: boolean): void {
+export function burstConfetti(canvas: HTMLCanvasElement, prefersReducedMotion: boolean, bursts: Array<{ x: number; y: number }>): void {
   if (prefersReducedMotion) return;
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
 
   const pieces: Piece[] = [];
-  const rect = canvas.getBoundingClientRect();
-  // Scale factor for CSS size vs canvas width/height
-  const scaleX = rect.width / canvas.width;
-  const scaleY = rect.height / canvas.height;
-
-  for (let i = 0; i < 80; i++) {
-    pieces.push({
-      x: canvas.width / 2 + (Math.random() - 0.5) * 40 / scaleX,
-      y: canvas.height / 4, // from near the indicator
-      vx: (Math.random() - 0.5) * 6,
-      vy: -Math.random() * 6 - 2,
-      w: 6 + Math.random() * 4,
-      h: 10 + Math.random() * 6,
-      r: Math.random() * Math.PI * 2,
-      vr: (Math.random() - 0.5) * 0.4,
-      color: COLORS[i % COLORS.length],
-      life: 1,
-    });
+  for (const b of bursts) {
+    for (let i = 0; i < 60; i++) {
+      pieces.push({
+        x: b.x,
+        y: b.y,
+        vx: (Math.random() - 0.5) * 7,
+        vy: -Math.random() * 6 - 2,
+        w: 6 + Math.random() * 4,
+        h: 10 + Math.random() * 6,
+        r: Math.random() * Math.PI * 2,
+        vr: (Math.random() - 0.5) * 0.5,
+        color: COLORS[i % COLORS.length],
+        life: 1,
+      });
+    }
   }
 
   const start = performance.now();
@@ -47,7 +44,7 @@ export function burstConfetti(canvas: HTMLCanvasElement, prefersReducedMotion: b
   (function frame(now: number) {
     const t = Math.min(1, (now - start) / duration);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const g = 0.15; // gravity
+    const g = 0.16; // gravity
     for (const p of pieces) {
       p.vy += g;
       p.x += p.vx;

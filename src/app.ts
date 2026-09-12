@@ -57,9 +57,26 @@ els.spinBtn.addEventListener('click', async () => {
   await wheel.spin(tasks, (idx) => {
     const t = tasks[idx];
     if (t) announceResult(t.name);
-    // Confetti burst on result
+    // Confetti bursts around the chosen segment
     const confettiCanvas = document.getElementById('confetti') as HTMLCanvasElement | null;
-    if (confettiCanvas) burstConfetti(confettiCanvas, prefers);
+    if (confettiCanvas) {
+      const geom = wheel.getGeometry();
+      const n = Math.max(tasks.length, 1);
+      const anglePer = (Math.PI * 2) / n;
+      // Compute the mid-angle of selected segment now under the indicator: top is -PI/2
+      // Convert to Cartesian point slightly outside the wheel rim
+      const mid = -Math.PI / 2; // at the indicator
+      const r = geom.radius + 12; // just outside the rim
+      const xMid = geom.cx + Math.cos(mid) * r;
+      const yMid = geom.cy + Math.sin(mid) * r;
+      // Place two side bursts offset by +/- 20 degrees
+      const off = 20 * Math.PI / 180;
+      const xL = geom.cx + Math.cos(mid - off) * r;
+      const yL = geom.cy + Math.sin(mid - off) * r;
+      const xR = geom.cx + Math.cos(mid + off) * r;
+      const yR = geom.cy + Math.sin(mid + off) * r;
+      burstConfetti(confettiCanvas, prefers, [ { x: xL, y: yL }, { x: xMid, y: yMid }, { x: xR, y: yR } ]);
+    }
   }, prefers);
 });
 

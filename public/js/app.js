@@ -52,7 +52,21 @@ els.spinBtn.addEventListener('click', async () => {
     const t = tasks[idx];
     if (t) announceResult(t.name);
     const confettiCanvas = document.getElementById('confetti');
-    if (confettiCanvas) burstConfetti(confettiCanvas, prefers);
+    if (confettiCanvas) {
+      const geom = wheel.getGeometry();
+      const n = Math.max(tasks.length, 1);
+      const anglePer = (Math.PI * 2) / n;
+      const mid = -Math.PI / 2;
+      const r = geom.radius + 12;
+      const xMid = geom.cx + Math.cos(mid) * r;
+      const yMid = geom.cy + Math.sin(mid) * r;
+      const off = 20 * Math.PI / 180;
+      const xL = geom.cx + Math.cos(mid - off) * r;
+      const yL = geom.cy + Math.sin(mid - off) * r;
+      const xR = geom.cx + Math.cos(mid + off) * r;
+      const yR = geom.cy + Math.sin(mid + off) * r;
+      burstConfetti(confettiCanvas, prefers, [{ x: xL, y: yL }, { x: xMid, y: yMid }, { x: xR, y: yR }]);
+    }
   }, prefers);
 });
 els.spinBtn.addEventListener('keydown', (e) => {

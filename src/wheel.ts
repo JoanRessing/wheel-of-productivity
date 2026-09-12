@@ -5,7 +5,16 @@ export class Wheel {
   private ctx: CanvasRenderingContext2D;
   private radius: number;
   private state: WheelState = { angle: 0, spinning: false };
-  private colors: string[] = ['#22d3ee', '#f59e0b', '#34d399', '#a78bfa', '#f472b6', '#f43f5e', '#60a5fa'];
+  // Vibrant color palette for segments
+  private colors: string[] = [
+    '#ff3b3b', // vivid red
+    '#ff7a00', // orange
+    '#ffd400', // yellow
+    '#26e5ff', // cyan
+    '#00d084', // green
+    '#a64dff', // purple
+    '#ff4d94', // pink
+  ];
 
   constructor(private canvas: HTMLCanvasElement) {
     const ctx = canvas.getContext('2d');
@@ -23,6 +32,7 @@ export class Wheel {
 
     const n = Math.max(tasks.length, 1);
     const anglePer = (Math.PI * 2) / n;
+    const fontSize = n <= 6 ? 18 : n <= 10 ? 14 : 12;
     for (let i = 0; i < n; i++) {
       const start = this.state.angle + i * anglePer;
       const end = start + anglePer;
@@ -31,8 +41,13 @@ export class Wheel {
       ctx.arc(cx, cy, this.radius, start, end);
       ctx.closePath();
       const color = this.colors[i % this.colors.length];
-      ctx.fillStyle = color + (highlightIndex === i ? 'cc' : '88');
+      ctx.fillStyle = color; // fully opaque for vibrancy
       ctx.fill();
+
+      // Separator stroke to make segments distinct
+      ctx.strokeStyle = '#0b1220';
+      ctx.lineWidth = 2;
+      ctx.stroke();
 
       // Labels
       if (tasks[i]) {
@@ -41,10 +56,13 @@ export class Wheel {
         ctx.translate(cx, cy);
         ctx.rotate(mid);
         ctx.textAlign = 'right';
-        ctx.fillStyle = '#0b1220';
-        ctx.font = 'bold 14px system-ui';
+        ctx.font = `bold ${fontSize}px system-ui`;
+        // High-contrast label with subtle shadow
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = 'rgba(0,0,0,0.55)';
+        ctx.shadowBlur = 2;
         const label = tasks[i].name.length > 22 ? tasks[i].name.slice(0, 21) + '…' : tasks[i].name;
-        ctx.fillText(label, this.radius - 12, 4);
+        ctx.fillText(label, this.radius - 10, 5);
         ctx.restore();
       }
     }
@@ -54,6 +72,16 @@ export class Wheel {
     ctx.arc(cx, cy, 22, 0, Math.PI * 2);
     ctx.fillStyle = '#0b1220';
     ctx.fill();
+  }
+
+  getGeometry() {
+    const { canvas } = this;
+    return {
+      cx: canvas.width / 2,
+      cy: canvas.height / 2,
+      radius: this.radius,
+      canvas,
+    } as const;
   }
 
   async spin(tasks: Task[], onSelected: (index: number) => void, prefersReducedMotion: boolean): Promise<void> {
