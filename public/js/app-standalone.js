@@ -99,6 +99,18 @@
         if (t<1) requestAnimationFrame(frame); else {
           angle=((angle%(Math.PI*2))+Math.PI*2)%(Math.PI*2); var theta=(( -Math.PI/2 - angle)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
           var idx=Math.floor(theta/anglePer)%n; var task=tasks[idx]; if (task) els.result.textContent='Selected: '+task.name;
+          // Confetti bursts around indicator (top)
+          var prefersReduced = false;
+          try { prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){}
+          if (!prefersReduced && els.confetti) {
+            var cx = els.canvas.width/2, cy = els.canvas.height/2; var r = radius + 12; var mid = -Math.PI/2; var off = 20 * Math.PI/180;
+            var bursts = [
+              { x: cx + Math.cos(mid - off) * r, y: cy + Math.sin(mid - off) * r },
+              { x: cx + Math.cos(mid) * r,       y: cy + Math.sin(mid) * r },
+              { x: cx + Math.cos(mid + off) * r, y: cy + Math.sin(mid + off) * r },
+            ];
+            burstConfetti(els.confetti, bursts);
+          }
         }
       })(t0);
     }
@@ -130,3 +142,36 @@
     console.error('Fallback init failed', e);
   }
 })();
+
+function burstConfetti(canvas, bursts){
+  var ctx = canvas.getContext('2d'); if(!ctx) return;
+  var COLORS=['#22d3ee','#f59e0b','#34d399','#a78bfa','#f472b6','#f43f5e','#60a5fa'];
+  var pieces=[];
+  for (var b=0; b<bursts.length; b++){
+    for (var i=0;i<60;i++){
+      pieces.push({
+        x: bursts[b].x,
+        y: bursts[b].y,
+        vx: (Math.random()-0.5)*7,
+        vy: -Math.random()*6-2,
+        w: 6+Math.random()*4,
+        h: 10+Math.random()*6,
+        r: Math.random()*Math.PI*2,
+        vr: (Math.random()-0.5)*0.5,
+        color: COLORS[i % COLORS.length],
+        life: 1,
+      });
+    }
+  }
+  var start=performance.now(); var duration=1800;
+  (function frame(now){
+    var t=Math.min(1,(now-start)/duration); ctx.clearRect(0,0,canvas.width,canvas.height); var g=0.16;
+    for (var j=0;j<pieces.length;j++){
+      var p=pieces[j]; p.vy+=g; p.x+=p.vx; p.y+=p.vy; p.r+=p.vr; p.life=1-t;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r);
+      ctx.fillStyle=p.color+Math.floor(255*p.life).toString(16).padStart(2,'0');
+      ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore();
+    }
+    if (t<1) requestAnimationFrame(frame); else ctx.clearRect(0,0,canvas.width,canvas.height);
+  })(start);
+}
