@@ -152,6 +152,13 @@ els.spinBtn.addEventListener('click', async () => {
     const confettiCanvas = document.getElementById('confetti') as HTMLCanvasElement | null;
     if (confettiCanvas) {
       const geom = wheel.getGeometry();
+      const wheelRect = els.canvas.getBoundingClientRect();
+      const scaleX = wheelRect.width / els.canvas.width;
+      const scaleY = wheelRect.height / els.canvas.height;
+      const toViewport = (x: number, y: number): { x: number; y: number } => ({
+        x: wheelRect.left + x * scaleX,
+        y: wheelRect.top + y * scaleY,
+      });
       const n = Math.max(filteredTasks.length, 1);
       const anglePer = (Math.PI * 2) / n;
       // Compute edges of the selected partition on the rim and burst outward from those edges
@@ -168,10 +175,13 @@ els.spinBtn.addEventListener('click', async () => {
       // Midpoint slightly outside for central burst
       const xMid = geom.cx + Math.cos(base) * rOuter2;
       const yMid = geom.cy + Math.sin(base) * rOuter2;
+      const startPoint = toViewport(xStart, yStart);
+      const midPoint = toViewport(xMid, yMid);
+      const endPoint = toViewport(xEnd, yEnd);
       burstConfetti(confettiCanvas, prefers, [
-        { x: xStart, y: yStart, dir: start },
-        { x: xMid, y: yMid, dir: base },
-        { x: xEnd, y: yEnd, dir: end },
+        { ...startPoint, dir: start },
+        { ...midPoint, dir: base },
+        { ...endPoint, dir: end },
       ]);
     }
   }, prefers);

@@ -2,6 +2,7 @@ export function burstConfetti(canvas, prefersReducedMotion, bursts) {
   if (prefersReducedMotion) return;
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
+  resizeOverlayCanvas(canvas, ctx);
   const COLORS = ['#22d3ee', '#f59e0b', '#34d399', '#a78bfa', '#f472b6', '#f43f5e', '#60a5fa'];
   const pieces = [];
   for (const b of bursts) {
@@ -41,4 +42,15 @@ export function burstConfetti(canvas, prefersReducedMotion, bursts) {
     }
     if (t < 1) requestAnimationFrame(frame); else ctx.clearRect(0, 0, canvas.width, canvas.height);
   })(start);
+}
+
+function resizeOverlayCanvas(canvas, ctx) {
+  const pixelRatio = window.devicePixelRatio || 1;
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  const scaledWidth = Math.round(width * pixelRatio);
+  const scaledHeight = Math.round(height * pixelRatio);
+  if (canvas.width !== scaledWidth) canvas.width = scaledWidth;
+  if (canvas.height !== scaledHeight) canvas.height = scaledHeight;
+  ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
 }

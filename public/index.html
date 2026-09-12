@@ -48,7 +48,6 @@
         <h2 id="wheel-heading" class="sr-only">Wheel</h2>
         <div class="wheel-wrap">
           <canvas id="wheel" width="500" height="500" aria-label="Task wheel" role="img"></canvas>
-          <canvas id="confetti" width="500" height="500" aria-hidden="true"></canvas>
           <div class="indicator" aria-hidden="true">▼</div>
         </div>
         <div class="actions center">
@@ -58,6 +57,8 @@
         <p id="result" class="result" aria-live="assertive"></p>
       </section>
     </main>
+
+    <canvas id="confetti" width="1" height="1" aria-hidden="true"></canvas>
 
     <div id="drawer-overlay" class="overlay overlay-drawer" hidden></div>
     <aside id="drawer" class="drawer" role="complementary" aria-labelledby="tasks-heading">

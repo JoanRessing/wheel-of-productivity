@@ -19,6 +19,7 @@ export function burstConfetti(canvas: HTMLCanvasElement, prefersReducedMotion: b
   if (prefersReducedMotion) return;
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
+  resizeOverlayCanvas(canvas, ctx);
 
   const pieces: Piece[] = [];
   for (const b of bursts) {
@@ -61,4 +62,17 @@ export function burstConfetti(canvas: HTMLCanvasElement, prefersReducedMotion: b
     }
     if (t < 1) requestAnimationFrame(frame); else ctx.clearRect(0, 0, canvas.width, canvas.height);
   })(start);
+}
+
+function resizeOverlayCanvas(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D): void {
+  const pixelRatio = window.devicePixelRatio || 1;
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  const scaledWidth = Math.round(width * pixelRatio);
+  const scaledHeight = Math.round(height * pixelRatio);
+
+  if (canvas.width !== scaledWidth) canvas.width = scaledWidth;
+  if (canvas.height !== scaledHeight) canvas.height = scaledHeight;
+
+  ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
 }

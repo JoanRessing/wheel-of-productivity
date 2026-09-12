@@ -283,10 +283,17 @@
           if (!prefersReduced && els.confetti) {
             var cx = els.canvas.width/2, cy = els.canvas.height/2; var base = -Math.PI/2; var start = base - anglePer/2; var end = base + anglePer/2;
             var r1 = radius + 2, r2 = radius + 14;
+            var wheelRect = els.canvas.getBoundingClientRect();
+            var scaleX = wheelRect.width / els.canvas.width;
+            var scaleY = wheelRect.height / els.canvas.height;
+            function toViewport(x, y) { return { x: wheelRect.left + x * scaleX, y: wheelRect.top + y * scaleY }; }
+            var startPoint = toViewport(cx + Math.cos(start)*r1, cy + Math.sin(start)*r1);
+            var midPoint = toViewport(cx + Math.cos(base)*r2, cy + Math.sin(base)*r2);
+            var endPoint = toViewport(cx + Math.cos(end)*r1, cy + Math.sin(end)*r1);
             var bursts = [
-              { x: cx + Math.cos(start)*r1, y: cy + Math.sin(start)*r1, dir: start },
-              { x: cx + Math.cos(base)*r2,  y: cy + Math.sin(base)*r2,  dir: base },
-              { x: cx + Math.cos(end)*r1,   y: cy + Math.sin(end)*r1,   dir: end },
+              { x: startPoint.x, y: startPoint.y, dir: start },
+              { x: midPoint.x, y: midPoint.y, dir: base },
+              { x: endPoint.x, y: endPoint.y, dir: end },
             ];
             burstConfetti(els.confetti, bursts);
           }
@@ -337,6 +344,7 @@
 
 function burstConfetti(canvas, bursts){
   var ctx = canvas.getContext('2d'); if(!ctx) return;
+  resizeOverlayCanvas(canvas, ctx);
   var COLORS=['#22d3ee','#f59e0b','#34d399','#a78bfa','#f472b6','#f43f5e','#60a5fa'];
   var pieces=[];
   for (var b=0; b<bursts.length; b++){
@@ -366,4 +374,15 @@ function burstConfetti(canvas, bursts){
     }
     if (t<1) requestAnimationFrame(frame); else ctx.clearRect(0,0,canvas.width,canvas.height);
   })(start);
+}
+
+function resizeOverlayCanvas(canvas, ctx){
+  var pixelRatio = window.devicePixelRatio || 1;
+  var width = window.innerWidth;
+  var height = window.innerHeight;
+  var scaledWidth = Math.round(width * pixelRatio);
+  var scaledHeight = Math.round(height * pixelRatio);
+  if (canvas.width !== scaledWidth) canvas.width = scaledWidth;
+  if (canvas.height !== scaledHeight) canvas.height = scaledHeight;
+  ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
 }

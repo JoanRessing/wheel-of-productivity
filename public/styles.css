@@ -197,13 +197,12 @@ canvas#wheel {
 }
 
 canvas#confetti {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  width: min(84vw, 540px);
-  height: auto;
-  max-width: 540px;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
-  z-index: 3;
+  z-index: 1000;
 }
 
 .indicator {
