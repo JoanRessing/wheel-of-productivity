@@ -9,8 +9,8 @@ export function burstConfetti(canvas, prefersReducedMotion, bursts) {
       pieces.push({
         x: b.x,
         y: b.y,
-        vx: (Math.random() - 0.5) * 7,
-        vy: -Math.random() * 6 - 2,
+        vx: (Math.cos((b.dir ?? -Math.PI / 2)) * (2 + Math.random() * 2)) + (Math.random() - 0.5) * 2.5,
+        vy: (Math.sin((b.dir ?? -Math.PI / 2)) * (2 + Math.random() * 2)) + (Math.random() - 0.5) * 2.5,
         w: 6 + Math.random() * 4,
         h: 10 + Math.random() * 6,
         r: Math.random() * Math.PI * 2,

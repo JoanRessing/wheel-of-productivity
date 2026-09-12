@@ -87,19 +87,25 @@ els.spinBtn.addEventListener('click', async () => {
       const geom = wheel.getGeometry();
       const n = Math.max(tasks.length, 1);
       const anglePer = (Math.PI * 2) / n;
-      // Compute the mid-angle of selected segment now under the indicator: top is -PI/2
-      // Convert to Cartesian point slightly outside the wheel rim
-      const mid = -Math.PI / 2; // at the indicator
-      const r = geom.radius + 12; // just outside the rim
-      const xMid = geom.cx + Math.cos(mid) * r;
-      const yMid = geom.cy + Math.sin(mid) * r;
-      // Place two side bursts offset by +/- 20 degrees
-      const off = 20 * Math.PI / 180;
-      const xL = geom.cx + Math.cos(mid - off) * r;
-      const yL = geom.cy + Math.sin(mid - off) * r;
-      const xR = geom.cx + Math.cos(mid + off) * r;
-      const yR = geom.cy + Math.sin(mid + off) * r;
-      burstConfetti(confettiCanvas, prefers, [ { x: xL, y: yL }, { x: xMid, y: yMid }, { x: xR, y: yR } ]);
+      // Compute edges of the selected partition on the rim and burst outward from those edges
+      const base = -Math.PI / 2; // top
+      const start = base - anglePer / 2;
+      const end = base + anglePer / 2;
+      const rOuter = geom.radius + 2; // right at edge
+      const rOuter2 = geom.radius + 14; // slightly outside
+      // Edge points
+      const xStart = geom.cx + Math.cos(start) * rOuter;
+      const yStart = geom.cy + Math.sin(start) * rOuter;
+      const xEnd = geom.cx + Math.cos(end) * rOuter;
+      const yEnd = geom.cy + Math.sin(end) * rOuter;
+      // Midpoint slightly outside for central burst
+      const xMid = geom.cx + Math.cos(base) * rOuter2;
+      const yMid = geom.cy + Math.sin(base) * rOuter2;
+      burstConfetti(confettiCanvas, prefers, [
+        { x: xStart, y: yStart, dir: start },
+        { x: xMid, y: yMid, dir: base },
+        { x: xEnd, y: yEnd, dir: end },
+      ]);
     }
   }, prefers);
 });

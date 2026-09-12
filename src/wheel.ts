@@ -120,6 +120,9 @@ export class Wheel {
           // Compute which index actually sits under the indicator at the top
           const theta = ((-Math.PI / 2 - this.state.angle) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
           const indexAtTop = Math.floor(theta / anglePer) % n;
+          // Snap so the chosen partition's midpoint is exactly at the top indicator
+          const desiredAngle = -Math.PI / 2 - (indexAtTop * anglePer + anglePer / 2);
+          this.state.angle = ((desiredAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
           this.draw(tasks, indexAtTop);
           onSelected(indexAtTop);
           resolve();

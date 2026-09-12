@@ -15,7 +15,7 @@ interface Piece {
 
 const COLORS = ['#22d3ee', '#f59e0b', '#34d399', '#a78bfa', '#f472b6', '#f43f5e', '#60a5fa'];
 
-export function burstConfetti(canvas: HTMLCanvasElement, prefersReducedMotion: boolean, bursts: Array<{ x: number; y: number }>): void {
+export function burstConfetti(canvas: HTMLCanvasElement, prefersReducedMotion: boolean, bursts: Array<{ x: number; y: number; dir?: number }>): void {
   if (prefersReducedMotion) return;
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
@@ -26,8 +26,9 @@ export function burstConfetti(canvas: HTMLCanvasElement, prefersReducedMotion: b
       pieces.push({
         x: b.x,
         y: b.y,
-        vx: (Math.random() - 0.5) * 7,
-        vy: -Math.random() * 6 - 2,
+        // bias velocity outward from provided direction if present
+        vx: (Math.cos(b.dir ?? -Math.PI / 2) * (2 + Math.random() * 2)) + (Math.random() - 0.5) * 2.5,
+        vy: (Math.sin(b.dir ?? -Math.PI / 2) * (2 + Math.random() * 2)) + (Math.random() - 0.5) * 2.5,
         w: 6 + Math.random() * 4,
         h: 10 + Math.random() * 6,
         r: Math.random() * Math.PI * 2,

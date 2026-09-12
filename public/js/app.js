@@ -77,16 +77,22 @@ els.spinBtn.addEventListener('click', async () => {
       const geom = wheel.getGeometry();
       const n = Math.max(tasks.length, 1);
       const anglePer = (Math.PI * 2) / n;
-      const mid = -Math.PI / 2;
-      const r = geom.radius + 12;
-      const xMid = geom.cx + Math.cos(mid) * r;
-      const yMid = geom.cy + Math.sin(mid) * r;
-      const off = 20 * Math.PI / 180;
-      const xL = geom.cx + Math.cos(mid - off) * r;
-      const yL = geom.cy + Math.sin(mid - off) * r;
-      const xR = geom.cx + Math.cos(mid + off) * r;
-      const yR = geom.cy + Math.sin(mid + off) * r;
-      burstConfetti(confettiCanvas, prefers, [{ x: xL, y: yL }, { x: xMid, y: yMid }, { x: xR, y: yR }]);
+      const base = -Math.PI / 2;
+      const start = base - anglePer / 2;
+      const end = base + anglePer / 2;
+      const rOuter = geom.radius + 2;
+      const rOuter2 = geom.radius + 14;
+      const xStart = geom.cx + Math.cos(start) * rOuter;
+      const yStart = geom.cy + Math.sin(start) * rOuter;
+      const xEnd = geom.cx + Math.cos(end) * rOuter;
+      const yEnd = geom.cy + Math.sin(end) * rOuter;
+      const xMid = geom.cx + Math.cos(base) * rOuter2;
+      const yMid = geom.cy + Math.sin(base) * rOuter2;
+      burstConfetti(confettiCanvas, prefers, [
+        { x: xStart, y: yStart, dir: start },
+        { x: xMid, y: yMid, dir: base },
+        { x: xEnd, y: yEnd, dir: end },
+      ]);
     }
   }, prefers);
 });

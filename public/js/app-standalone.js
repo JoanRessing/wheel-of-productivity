@@ -99,15 +99,16 @@
         if (t<1) requestAnimationFrame(frame); else {
           angle=((angle%(Math.PI*2))+Math.PI*2)%(Math.PI*2); var theta=(( -Math.PI/2 - angle)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
           var idx=Math.floor(theta/anglePer)%n; var task=tasks[idx]; if (task) els.result.textContent='Selected: '+task.name;
-          // Confetti bursts around indicator (top)
+          // Confetti bursts out of the selected partition edges around the indicator (top)
           var prefersReduced = false;
           try { prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){}
           if (!prefersReduced && els.confetti) {
-            var cx = els.canvas.width/2, cy = els.canvas.height/2; var r = radius + 12; var mid = -Math.PI/2; var off = 20 * Math.PI/180;
+            var cx = els.canvas.width/2, cy = els.canvas.height/2; var base = -Math.PI/2; var start = base - anglePer/2; var end = base + anglePer/2;
+            var r1 = radius + 2, r2 = radius + 14;
             var bursts = [
-              { x: cx + Math.cos(mid - off) * r, y: cy + Math.sin(mid - off) * r },
-              { x: cx + Math.cos(mid) * r,       y: cy + Math.sin(mid) * r },
-              { x: cx + Math.cos(mid + off) * r, y: cy + Math.sin(mid + off) * r },
+              { x: cx + Math.cos(start)*r1, y: cy + Math.sin(start)*r1, dir: start },
+              { x: cx + Math.cos(base)*r2,  y: cy + Math.sin(base)*r2,  dir: base },
+              { x: cx + Math.cos(end)*r1,   y: cy + Math.sin(end)*r1,   dir: end },
             ];
             burstConfetti(els.confetti, bursts);
           }
@@ -152,8 +153,8 @@ function burstConfetti(canvas, bursts){
       pieces.push({
         x: bursts[b].x,
         y: bursts[b].y,
-        vx: (Math.random()-0.5)*7,
-        vy: -Math.random()*6-2,
+        vx: Math.cos(bursts[b].dir||(-Math.PI/2))*(2+Math.random()*2) + (Math.random()-0.5)*2.5,
+        vy: Math.sin(bursts[b].dir||(-Math.PI/2))*(2+Math.random()*2) + (Math.random()-0.5)*2.5,
         w: 6+Math.random()*4,
         h: 10+Math.random()*6,
         r: Math.random()*Math.PI*2,
