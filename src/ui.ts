@@ -8,6 +8,12 @@ export const els = {
   deadline: document.getElementById('task-deadline') as HTMLInputElement,
   addBtn: document.getElementById('add-task') as HTMLButtonElement,
   resetBtn: document.getElementById('reset-session') as HTMLButtonElement,
+  drawerToggle: document.getElementById('drawer-toggle') as HTMLButtonElement,
+  drawer: document.getElementById('drawer') as HTMLElement,
+  openAddTask: document.getElementById('open-add-task') as HTMLButtonElement,
+  modal: document.getElementById('task-modal') as HTMLElement,
+  overlay: document.getElementById('modal-overlay') as HTMLElement,
+  closeModal: document.getElementById('close-task-modal') as HTMLButtonElement,
   list: document.getElementById('task-list') as HTMLUListElement,
   count: document.getElementById('task-count') as HTMLElement,
   spinBtn: document.getElementById('spin') as HTMLButtonElement,
@@ -66,4 +72,15 @@ export function renderTasks(tasks: Task[], onEdit: (id: string, patch: Partial<T
 
 export function announceResult(name: string) {
   els.result.textContent = `Selected: ${name}`;
+}
+
+export function openModal() {
+  els.overlay.hidden = false;
+  els.modal.hidden = false;
+  els.name.focus();
+}
+
+export function closeModal() {
+  els.overlay.hidden = true;
+  els.modal.hidden = true;
 }

@@ -2,7 +2,7 @@
 // This file is generated from src/*.ts; the version here is kept in sync manually.
 import { getOrCreateSessionId, loadState, saveState, clearSession } from './storage.js';
 import { uid } from './util.js';
-import { els, clearForm, renderTasks, announceResult } from './ui.js';
+import { els, clearForm, renderTasks, announceResult, openModal, closeModal } from './ui.js';
 import { Wheel } from './wheel.js';
 import { burstConfetti } from './confetti.js';
 
@@ -76,3 +76,21 @@ els.spinBtn.addEventListener('keydown', (e) => {
   }
 });
 sync();
+if (els.drawerToggle) {
+  els.drawerToggle.addEventListener('click', () => {
+    const isOpen = els.drawer.classList.toggle('open');
+    els.drawerToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+}
+if (els.openAddTask) {
+  els.openAddTask.addEventListener('click', () => openModal());
+}
+if (els.closeModal) {
+  els.closeModal.addEventListener('click', () => closeModal());
+}
+if (els.overlay) {
+  els.overlay.addEventListener('click', () => closeModal());
+}
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && !els.modal.hidden) closeModal();
+});

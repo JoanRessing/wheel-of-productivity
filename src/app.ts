@@ -1,7 +1,7 @@
 import { Task } from './types.js';
 import { uid } from './util.js';
 import { loadState, saveState, getOrCreateSessionId, clearSession } from './storage.js';
-import { els, clearForm, renderTasks, announceResult } from './ui.js';
+import { els, clearForm, renderTasks, announceResult, openModal, closeModal } from './ui.js';
 import { Wheel } from './wheel.js';
 import { burstConfetti } from './confetti.js';
 
@@ -90,3 +90,24 @@ els.spinBtn.addEventListener('keydown', (e) => {
 
 // Initial render
 sync();
+
+// Drawer and modal interactions
+if (els.drawerToggle) {
+  els.drawerToggle.addEventListener('click', () => {
+    const isOpen = els.drawer.classList.toggle('open');
+    els.drawerToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+}
+
+if (els.openAddTask) {
+  els.openAddTask.addEventListener('click', () => openModal());
+}
+if (els.closeModal) {
+  els.closeModal.addEventListener('click', () => closeModal());
+}
+if (els.overlay) {
+  els.overlay.addEventListener('click', () => closeModal());
+}
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && !els.modal.hidden) closeModal();
+});

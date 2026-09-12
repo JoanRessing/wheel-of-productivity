@@ -22,6 +22,16 @@ body {
   margin: 1.5rem auto;
 }
 
+.header { display: flex; justify-content: space-between; align-items: center; }
+.tasks-toggle { background: #0b1220; color: var(--fg); border: 1px solid #334155; border-radius: 10px; padding: .5rem .75rem; }
+
+.main-center { display: grid; place-items: center; }
+.wheel-card { width: min(720px, 96vw); }
+.actions.center { justify-content: center; }
+.actions.right { justify-content: flex-end; }
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,1px,1px); border: 0; }
+
 header h1 { margin: 0; }
 .subtitle { color: var(--muted); margin-top: .25rem; }
 
@@ -75,6 +85,20 @@ canvas#confetti { position: absolute; inset: 0; width: min(86vw, 500px); height:
 .result { font-size: 1.1rem; min-height: 1.5em; }
 
 .muted { color: var(--muted); }
+
+/* Drawer (task list) */
+.drawer { position: fixed; top: 0; right: 0; height: 100vh; width: min(380px, 92vw); background: var(--card); border-left: 1px solid #1f2937; transform: translateX(100%); transition: transform .25s ease; z-index: 20; display: grid; grid-template-rows: auto 1fr auto; padding: 1rem; gap: .75rem; }
+.drawer.open { transform: translateX(0%); }
+.drawer-header { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; }
+.drawer-actions { display: flex; justify-content: flex-end; }
+
+/* Modal */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 30; }
+.modal { position: fixed; inset: 0; display: grid; place-items: center; z-index: 31; }
+.modal[hidden], .overlay[hidden] { display: none !important; }
+.modal-content { width: min(640px, 94vw); background: var(--card); border: 1px solid #1f2937; border-radius: 12px; padding: 1rem; box-shadow: 0 10px 30px rgba(0,0,0,0.35); }
+.modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: .5rem; }
+.small { padding: .4rem .6rem; font-size: .9rem; }
 
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }

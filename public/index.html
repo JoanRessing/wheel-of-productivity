@@ -8,14 +8,45 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <header class="container">
+    <header class="container header">
       <h1>Wheel of Productivity</h1>
-      <p class="subtitle">Let fate pick your next task.</p>
+      <button id="drawer-toggle" class="tasks-toggle" aria-controls="drawer" aria-expanded="false">Tasks</button>
     </header>
 
-    <main class="container">
-      <section aria-labelledby="add-task-heading" class="card">
-        <h2 id="add-task-heading">Add a task</h2>
+    <main class="container main-center">
+      <section aria-labelledby="wheel-heading" class="card wheel-card">
+        <h2 id="wheel-heading" class="sr-only">Wheel</h2>
+        <div class="wheel-wrap">
+          <canvas id="wheel" width="500" height="500" aria-label="Task wheel" role="img"></canvas>
+          <canvas id="confetti" width="500" height="500" aria-hidden="true"></canvas>
+          <div class="indicator" aria-hidden="true">▼</div>
+        </div>
+        <div class="actions center">
+          <button id="open-add-task" class="secondary">Add task</button>
+          <button id="spin">Spin!</button>
+        </div>
+        <p id="result" class="result" aria-live="assertive"></p>
+      </section>
+    </main>
+
+    <aside id="drawer" class="drawer" role="complementary" aria-labelledby="tasks-heading">
+      <div class="drawer-header">
+        <h2 id="tasks-heading">Tasks</h2>
+        <div id="task-count" aria-live="polite" class="muted"></div>
+      </div>
+      <ul id="task-list" class="task-list" aria-live="polite"></ul>
+      <div class="drawer-actions">
+        <button id="reset-session" type="button" class="secondary small">Reset session</button>
+      </div>
+    </aside>
+
+    <div id="modal-overlay" class="overlay" hidden></div>
+    <div id="task-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="add-task-heading" hidden>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="add-task-heading">Add a task</h2>
+          <button id="close-task-modal" class="icon-btn" aria-label="Close">✕</button>
+        </div>
         <form id="task-form">
           <div class="grid">
             <label>
@@ -39,34 +70,12 @@
               <input type="date" id="task-deadline" />
             </label>
           </div>
-          <div class="actions">
+          <div class="actions right">
             <button id="add-task" type="submit">Add task</button>
-            <button id="reset-session" type="button" class="secondary">Reset session</button>
           </div>
         </form>
-      </section>
-
-      <section aria-labelledby="tasks-heading" class="card">
-        <div class="section-header">
-          <h2 id="tasks-heading">Tasks</h2>
-          <div id="task-count" aria-live="polite"></div>
-        </div>
-        <ul id="task-list" class="task-list" aria-live="polite"></ul>
-      </section>
-
-      <section aria-labelledby="wheel-heading" class="card">
-        <h2 id="wheel-heading">Wheel</h2>
-        <div class="wheel-wrap">
-          <canvas id="wheel" width="500" height="500" aria-label="Task wheel" role="img"></canvas>
-          <canvas id="confetti" width="500" height="500" aria-hidden="true"></canvas>
-          <div class="indicator" aria-hidden="true">▼</div>
-        </div>
-        <div class="actions">
-          <button id="spin">Spin</button>
-        </div>
-        <p id="result" class="result" aria-live="assertive"></p>
-      </section>
-    </main>
+      </div>
+    </div>
 
     <footer class="container muted">
       <p>Data is stored only in session cookies and clears when the session ends.</p>
