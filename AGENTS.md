@@ -6,7 +6,7 @@ Summary
 Scope and Constraints
 - Frontend-only. No server or database.
 - TypeScript + vanilla HTML/CSS/DOM, compiled to ESM JavaScript.
-- Persistence: session-only via cookies. We store a compact JSON across one or more session cookies. Data should clear with the session.
+- Persistence: localStorage for non-sensitive task data. Data should remain after closing/reopening the page until the user clears tasks or browser data.
 - Must be easily hostable on static hosts (GitHub Pages by default).
 - Accessibility: keyboard operable, screen-reader-friendly with ARIA live announcements, supports reduced motion.
 
@@ -17,7 +17,7 @@ Non-goals (initial release)
 Tech choices
 - TypeScript strict mode; ESM modules.
 - Canvas-based wheel rendering.
-- Cookie chunking to stay within per-cookie limits (~4KB; use ~3800 bytes chunks).
+- localStorage-based task persistence; keep stored data compact and non-sensitive.
 
 Conventions
 - Source in /src; compiled output in /public/js; static assets in /public.
@@ -30,13 +30,14 @@ Run and build
 - With Node.js: npm ci; npm run build to compile TypeScript.
 
 Security and privacy
-- Session cookies only; random, non-sensitive values. No PII required.
+- Store only non-sensitive task data in localStorage. No PII required.
 - No third-party scripts.
 
 Decision log
 - 2026-09-12: Chosen TypeScript without bundler for maximum portability; deploy via GitHub Pages workflow.
+- 2026-09-12: Switched from session cookies to localStorage because tasks should persist after closing/reopening the app.
 
 Glossary
 - Task: An item the user may want to complete.
 - Wheel: Visual roulette that randomly selects a task.
-- Session cookie: A cookie without an expiration date that is cleared when the browser session ends.
+- localStorage: Browser storage used for persistent, device-local task data.

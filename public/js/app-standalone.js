@@ -27,8 +27,35 @@
       confetti: document.getElementById('confetti'),
     };
 
-    // Minimal state stored in memory only for fallback (no cookies)
-    var tasks = [];
+    var STORAGE_KEY = 'wheel-of-productivity:tasks:v1';
+    var tasks = loadTasks();
+
+    function loadTasks(){
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return [];
+        var data = JSON.parse(raw);
+        if (!data || !Array.isArray(data.tasks)) return [];
+        return data.tasks.filter(function(t){ return t && typeof t.id === 'string' && typeof t.name === 'string'; }).map(function(t){
+          return {
+            id: t.id,
+            name: t.name,
+            time: typeof t.time === 'number' ? t.time : undefined,
+            location: t.location === 'indoor' || t.location === 'outdoor' || t.location === 'any' ? t.location : 'any',
+            deadline: typeof t.deadline === 'string' ? t.deadline : undefined,
+            weight: typeof t.weight === 'number' ? t.weight : undefined,
+          };
+        });
+      } catch(e) {
+        console.warn('Failed to load tasks from localStorage.', e);
+        return [];
+      }
+    }
+
+    function saveTasks(){
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ v: 1, tasks: tasks })); }
+      catch(e) { console.warn('Failed to save tasks to localStorage.', e); }
+    }
 
     function renderTasks() {
       els.list.innerHTML = '';
@@ -39,7 +66,7 @@
         var name = document.createElement('input');
         name.type = 'text';
         name.value = t.name;
-        name.addEventListener('change', function(){ t.name = name.value.trim() || t.name; renderTasks(); });
+        name.addEventListener('change', function(){ t.name = name.value.trim() || t.name; saveTasks(); renderTasks(); });
         var meta = document.createElement('div');
         meta.className = 'task-meta';
         var parts = [];
@@ -51,7 +78,7 @@
         del.className = 'icon-btn';
         del.type = 'button';
         del.textContent = 'Delete';
-        del.addEventListener('click', function(){ tasks = tasks.filter(function(x){ return x.id !== t.id; }); renderTasks(); });
+        del.addEventListener('click', function(){ tasks = tasks.filter(function(x){ return x.id !== t.id; }); saveTasks(); renderTasks(); });
         var left = document.createElement('div'); left.append(name, meta);
         var right = document.createElement('div'); right.className='task-actions'; right.append(del);
         li.append(left, right); els.list.append(li);
@@ -120,6 +147,7 @@
       var time=els.time.value?Math.max(0,Math.round(Number(els.time.value))):undefined;
       var loc=els.location.value||'any'; var dead=els.deadline.value||undefined;
       tasks=tasks.concat([{id:uid(), name:name, time:time, location:loc, deadline:dead}]);
+      saveTasks();
       els.name.value=''; els.time.value=''; els.location.value='any'; els.deadline.value='';
       closeModal(); renderTasks(); }
 
@@ -132,6 +160,7 @@
     if (els.drawerClose) els.drawerClose.addEventListener('click', function(){ els.drawer.classList.remove('open'); if(els.drawerOverlay) els.drawerOverlay.hidden=true; els.drawerToggle.setAttribute('aria-expanded','false'); els.drawerToggle.focus(); });
     if (els.drawerOverlay) els.drawerOverlay.addEventListener('click', function(){ els.drawer.classList.remove('open'); els.drawerOverlay.hidden=true; els.drawerToggle.setAttribute('aria-expanded','false'); els.drawerToggle.focus(); });
     if (els.spinBtn) els.spinBtn.addEventListener('click', spin);
+    if (els.resetBtn) els.resetBtn.addEventListener('click', function(){ if(confirm('Clear all saved tasks from this browser?')){ tasks=[]; try{ localStorage.removeItem(STORAGE_KEY); }catch(e){} renderTasks(); } });
 
     function openModal(){ if(els.overlay) els.overlay.hidden=false; if(els.modal) els.modal.hidden=false; if(els.name) els.name.focus(); }
     function closeModal(){ if(els.overlay) els.overlay.hidden=true; if(els.modal) els.modal.hidden=true; }

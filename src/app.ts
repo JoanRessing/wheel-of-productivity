@@ -1,36 +1,9 @@
 import { Task } from './types.js';
 import { uid } from './util.js';
-import { loadState, saveState, getOrCreateSessionId, clearSession } from './storage.js';
+import { loadState, saveState, clearStoredTasks } from './storage.js';
 import { els, clearForm, renderTasks, announceResult, openModal, closeModal } from './ui.js';
 import { Wheel } from './wheel.js';
 import { burstConfetti } from './confetti.js';
-
-// Ensure session id cookie exists
-getOrCreateSessionId();
-
-function cookieRoundtripWorks(): boolean {
-  const key = 'wop_test_' + Math.random().toString(36).slice(2);
-  document.cookie = `${key}=1; Path=/`;
-  const ok = document.cookie.includes(`${key}=`);
-  // best-effort cleanup
-  document.cookie = `${key}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-  return ok;
-}
-
-function showCookieNotice() {
-  const n = document.createElement('div');
-  n.setAttribute('role', 'status');
-  n.className = 'notice';
-  n.innerHTML = '<strong>Heads up:</strong> Some browsers block cookies and modules when opened as a local file. For best results, open via a local server or GitHub Pages.';
-  const btn = document.createElement('button');
-  btn.className = 'icon-btn small';
-  btn.style.marginLeft = '0.5rem';
-  btn.ariaLabel = 'Dismiss';
-  btn.textContent = 'Dismiss';
-  btn.addEventListener('click', () => n.remove());
-  n.appendChild(btn);
-  document.body.prepend(n);
-}
 
 let tasks: Task[] = loadState().tasks;
 
@@ -67,10 +40,9 @@ function addTaskFromForm(ev: SubmitEvent) {
 
 els.form.addEventListener('submit', addTaskFromForm);
 els.resetBtn.addEventListener('click', () => {
-  if (confirm('Reset session and clear all tasks?')) {
-    clearSession();
+  if (confirm('Clear all saved tasks from this browser?')) {
+    clearStoredTasks();
     tasks = [];
-    getOrCreateSessionId();
     sync();
   }
 });
@@ -121,13 +93,7 @@ els.spinBtn.addEventListener('keydown', (e) => {
 // Initial render
 sync();
 
-// If running from file:// in Chrome, cookies may not work; show a helpful notice
-try {
-  const isFile = location.protocol === 'file:';
-  if (isFile && !cookieRoundtripWorks()) {
-    showCookieNotice();
-  }
-} catch {}
+(window as Window & typeof globalThis & { __appLoaded?: boolean }).__appLoaded = true;
 
 // Drawer and modal interactions
 if (els.drawerToggle) {

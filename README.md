@@ -4,7 +4,7 @@ A playful roulette wheel web app to help you decide which task to do next. Add t
 
 Key points
 - Static site (no backend) built with TypeScript and vanilla HTML/CSS.
-- Session-only persistence via cookies (data clears when the browser session ends).
+- Persistent local browser storage using localStorage.
 - Accessible UI with keyboard support and ARIA live announcements.
 - Ready for GitHub Pages hosting.
 
@@ -25,7 +25,8 @@ Hosting on GitHub Pages
   3) The workflow compiles TypeScript and publishes the public/ directory.
 
 Data and privacy
-- Tasks are stored only in session cookies. Cookies are session-only (no expiration set) and cleared when the session ends.
+- Tasks are stored locally in your browser using localStorage, so they remain after closing and reopening the page.
+- Tasks are never sent to a server by this app.
 - No analytics or tracking.
 
 Planned enhancements

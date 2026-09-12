@@ -2,7 +2,7 @@ project_name: Wheel of Productivity
 stack:
   language: TypeScript (strict), ESM modules
   ui: Vanilla HTML/CSS, Canvas API
-  storage: Session cookies only (no localStorage/sessionStorage)
+  storage: localStorage for persistent non-sensitive task data (no sessionStorage)
   hosting: Static (GitHub Pages workflow included)
 rules:
   - Do not add frameworks or bundlers. Use tsc only.
@@ -19,4 +19,4 @@ testing:
 conventions:
   - Filenames: kebab-case for static assets; camelCase for TS exports.
   - Keep functions small; pure where possible.
-  - Do not store sensitive data in cookies; session-only data should be small.
+  - Do not store sensitive data in localStorage; task data should be small and non-sensitive.
