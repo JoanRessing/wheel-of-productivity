@@ -1,0 +1,22 @@
+project_name: Wheel of Productivity
+stack:
+  language: TypeScript (strict), ESM modules
+  ui: Vanilla HTML/CSS, Canvas API
+  storage: Session cookies only (no localStorage/sessionStorage)
+  hosting: Static (GitHub Pages workflow included)
+rules:
+  - Do not add frameworks or bundlers. Use tsc only.
+  - Keep build output in public/js; source in src/.
+  - Maintain accessibility: keyboard operable, ARIA live announcements, reduced motion support.
+  - Use semantic HTML and keep CSS minimal and responsive.
+  - Prefer explicit types; avoid any.
+  - Avoid external CDNs and third-party scripts.
+  - Write complete code; no placeholders.
+  - Use absolute paths in docs and instructions.
+testing:
+  - Manual: open /public/index.html in a browser and test add/spin/delete/reset flows.
+  - Typecheck: npm run typecheck (in CI).
+conventions:
+  - Filenames: kebab-case for static assets; camelCase for TS exports.
+  - Keep functions small; pure where possible.
+  - Do not store sensitive data in cookies; session-only data should be small.

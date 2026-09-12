@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wheel of Productivity</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="container">
+      <h1>Wheel of Productivity</h1>
+      <p class="subtitle">Let fate pick your next task.</p>
+    </header>
+
+    <main class="container">
+      <section aria-labelledby="add-task-heading" class="card">
+        <h2 id="add-task-heading">Add a task</h2>
+        <form id="task-form">
+          <div class="grid">
+            <label>
+              <span>Task name</span>
+              <input type="text" id="task-name" required maxlength="120" placeholder="e.g., Vacuum living room" />
+            </label>
+            <label>
+              <span>Time (min)</span>
+              <input type="number" id="task-time" min="0" step="5" placeholder="e.g., 30" />
+            </label>
+            <label>
+              <span>Location</span>
+              <select id="task-location">
+                <option value="any" selected>Any</option>
+                <option value="indoor">Indoor</option>
+                <option value="outdoor">Outdoor</option>
+              </select>
+            </label>
+            <label>
+              <span>Deadline</span>
+              <input type="date" id="task-deadline" />
+            </label>
+          </div>
+          <div class="actions">
+            <button id="add-task" type="submit">Add task</button>
+            <button id="reset-session" type="button" class="secondary">Reset session</button>
+          </div>
+        </form>
+      </section>
+
+      <section aria-labelledby="tasks-heading" class="card">
+        <div class="section-header">
+          <h2 id="tasks-heading">Tasks</h2>
+          <div id="task-count" aria-live="polite"></div>
+        </div>
+        <ul id="task-list" class="task-list" aria-live="polite"></ul>
+      </section>
+
+      <section aria-labelledby="wheel-heading" class="card">
+        <h2 id="wheel-heading">Wheel</h2>
+        <div class="wheel-wrap">
+          <canvas id="wheel" width="500" height="500" aria-label="Task wheel" role="img"></canvas>
+          <div class="indicator" aria-hidden="true">▼</div>
+        </div>
+        <div class="actions">
+          <button id="spin">Spin</button>
+        </div>
+        <p id="result" class="result" aria-live="assertive"></p>
+      </section>
+    </main>
+
+    <footer class="container muted">
+      <p>Data is stored only in session cookies and clears when the session ends.</p>
+    </footer>
+
+    <script type="module" src="/js/app.js"></script>
+  </body>
+  </html>

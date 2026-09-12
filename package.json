@@ -1,0 +1,14 @@
+{
+  "name": "wheel-of-productivity",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p .",
+    "clean": "rimraf public/js || rmdir /s /q public\\js 2> NUL || exit 0",
+    "typecheck": "tsc -p . --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}
