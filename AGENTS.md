@@ -1,7 +1,7 @@
 Project: Wheel of Productivity
 
 Summary
-- A playful, static web app that lets users add tasks and spin a roulette wheel to choose the next task. Optional attributes per task include: time estimate, location (indoor/outdoor/any), and deadline.
+- A playful, static web app that lets users add tasks and spin a roulette wheel to choose the next task. Optional attributes per task include: time estimate, location (indoor/outdoor/any), task dependencies and a deadline.
 
 Scope and Constraints
 - Frontend-only. No server or database.
